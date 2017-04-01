@@ -6,9 +6,9 @@
  * This program will check if it is possible to     *
  * scrabble the input to obtain the desired outuput.*
  *  Ex:                                             *
- *  sugestion("abandone") ->  "abandoned"           *
- *  					  ->  "abandoner"           *
- *  					  ->  "abandoners"          *
+ *  suggestion("abandone") ->  "abandoned"          *
+ *  					   ->  "abandoner"          *
+ *						   ->  "abandoners"         *
  * ************************************************ */
 
 // This vareable will hold our dictionary 
@@ -24,7 +24,7 @@ int main()
 	do{
 		std::vector<string> suggestions = dic->suggestions(alphabet);
 		for(int i = 0; i < suggestions.size(); i++)
-		cout << "sugestion(\"" << alphabet << "\") -> " << suggestions[i]  << endl;
+		cout << "suggestion(\"" << alphabet << "\") -> " << suggestions[i]  << endl;
 	}while( cin >> alphabet );
 	return 0;
 }
