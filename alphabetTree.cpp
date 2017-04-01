@@ -152,14 +152,99 @@ string AlphabetTree::dfs(TreeNode * nodeAt, vector<char> & toVisit, vector<bool>
 			 	tmpStrFound = dfs( child, toVisit, visited);
 			 	// Mark it as not viewed so we can visit it on the other nodes		
 				visited[j] = false;
-			  	// Save the largest string found
+			  	// Save the largest word found, only if is a word
 			  	if ( tmpStrFound.length() > maxChldrnStr.length() && ( tmpStrFound.length() > 1 || child->isWord ) )
 			  		maxChldrnStr = tmpStrFound;
 		  	}
 		}
-
 	}
-	
 	bgstStrFound += maxChldrnStr;
 	return bgstStrFound;
+}
+
+
+/* Receives a malformed input and gives a list of possible suggestions */
+vector<string> AlphabetTree::suggestions(string input)
+{// Node that we are exploring, we start at the root
+	TreeNode * nodeAt = root;
+	vector<string> suggestions;
+	// We will store our suggestions nodes at
+	vector<TreeNode*> possibleWords;
+	// Let's follow the input word throught the tree node 
+	for(int i = 0; i < input.length(); i++)
+	{	
+		TreeNode * nextNode = nullptr;
+		for( int j = 0; j < nodeAt->children->size(); j++ )
+		{	
+			TreeNode * child = nodeAt->children->at(j);
+			if (  child->letter == input[i] )
+			{ // Continue throught that node 
+				nextNode = child;
+				break;
+			}
+		}
+		if ( nextNode == nullptr )
+		{   // If there isn't a node with that letter 
+			// then we found an error and need to get corrections
+			// TODO: corrections functions
+			break;
+		}
+		else
+		{   // Continue to the next node 
+			nodeAt = nextNode;
+		}
+	}
+	// If we are at the end of input and it's a valid node 
+	// then get suggestions to end the words
+	if  ( nodeAt != nullptr && nodeAt->depth == input.length())
+	{
+		possibleWords = getSuggestions( nodeAt, 0 );
+	}
+	// After getting all the tree nodes we just need
+	// to transform them to strings
+	for(int i = 0; i < possibleWords.size(); i++)
+		suggestions.push_back(getWord(possibleWords[i]));
+	// Return suggestions or null
+	return suggestions;
+}
+
+// Search for the closests words possible
+vector<TreeNode*> AlphabetTree::getSuggestions(TreeNode *nodeAt, int depth)
+{	// Lets save the possible nodes in corrections
+	vector<TreeNode*> suggestions;	
+	// Increment depth
+	depth++;
+	for( int j = 0; j < nodeAt->children->size(); j++ )
+	{	// We start by searching at the last node 
+		TreeNode * child = nodeAt->children->at(j);
+		if (  child->isWord  )
+		{ // If it is a word the push back to suggestions
+			suggestions.push_back(child);
+		}
+		if ( depth <= S_MAX_DEPTH)
+		{ // Continue to search through the child node 
+			vector<TreeNode*> tmpSug = getSuggestions(child, depth);
+			// TODO: VECTOR PUSH COLLECTION SEARCH
+			for( int i = 0; i < tmpSug.size(); ++i)
+			{
+				suggestions.push_back(tmpSug[i]);
+			}
+		}
+	}	
+	return suggestions;
+}
+
+// Returns the word that ends at that node
+string AlphabetTree::getWord(TreeNode *originNode)
+{	
+	string result = "";
+	result = originNode->letter + result;
+	TreeNode * nextNode = originNode->parent;
+	while ( nextNode != nullptr )
+	{	// We create our word by bootstrap
+		result = nextNode->letter + result;
+		// Then travel from the leaf node to the root
+		nextNode = nextNode->parent;
+	}
+	return result;
 }

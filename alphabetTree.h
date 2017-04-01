@@ -12,6 +12,8 @@
 #include <stack>
 
 
+const int S_MAX_DEPTH = 2;
+
 using namespace std;
  
 class TreeNode
@@ -60,10 +62,16 @@ public:
 	/* Receives a set of letters and returns the longest*
  	 * possible string in the dictionary 				*/
 	string longest(string input);
-	//Searchs the tree for the possible word we can make with the toVisit vector
+	// Searchs the tree for the possible word we can make with the toVisit vector
 	string dfs(TreeNode * nodeAt, vector<char> & toVisit, vector<bool> visited);
-	//Check if a word exists in the dictionary
+	// Check if a word exists in the dictionary
 	bool exists(string input);
+	// Returns a list of possible corrections
+	vector<string> suggestions(string input);
+	// Search for the closests words possible
+	vector<TreeNode*> getSuggestions(TreeNode *nodeAt, int);	
+	// Returns the word that ends at that node
+	string getWord(TreeNode *nodeAt);
 };
 
 #endif
