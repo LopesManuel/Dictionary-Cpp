@@ -27,9 +27,11 @@ suggestion("abandone") ->  "abandoned"
 ## TODO:
 
 1. Correction function: 
-...Will return a correction suggestion to a malformed word
-...Branch: CorrectF
+
+   * Will return a correction suggestion to a malformed word
+   * Branch: CorrectF
 
 2. Add repeated words scoring system:
-...Will try to create a scoring system to return only the most udes words, avoiding "trash"
+
+   * Will try to create a scoring system to return only the most udes words, avoiding "trash"
   
